@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "better-tree"
+version = "0.1.0"
+description = "A better tree utility in Python"
+authors = ["antoniouaa <antoniouaa@hotmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+black = "^21.9b0"
+pre-commit = "^2.15.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
