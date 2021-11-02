@@ -6,7 +6,7 @@ from tree.rich_tree import tree as r_tree
 
 
 def traverse(path: pathlib.Path, subtree) -> None:
-    for i, p in enumerate(path.glob("*"), start=1):
+    for p in path.glob("*"):
         if any(p.name.startswith(char) for char in (".", "__")) and p.is_dir():
             continue
 
