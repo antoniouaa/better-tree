@@ -14,14 +14,18 @@ EMOJIS = {
 }
 
 
-def traverse(path: pathlib.Path, subtree) -> None:
+def traverse(path: pathlib.Path, subtree: Tree, depth: int = 1) -> None:
     for p in sorted(path.glob("*")):
         if any(p.name.startswith(char) for char in (".", "__")) and p.is_dir():
             continue
 
+        level = len(p.parts)
+        if level > depth:
+            return None
+
         if p.is_dir():
             node = subtree.add(f":file_folder: {p.name}", style="#ffdf87")
-            traverse(p, node)
+            traverse(p, node, depth)
         else:
             for suffix, (emoji, style) in EMOJIS.items():
                 if p.name.endswith(suffix):
@@ -29,10 +33,10 @@ def traverse(path: pathlib.Path, subtree) -> None:
 
 
 args = assemble_parser()
-# depth = args.depth
+depth = args.depth[0]
 
 root = pathlib.Path(args.path[0])
 
 tree = Tree(str(root))
-traverse(root, tree)
+traverse(path=root, subtree=tree, depth=depth)
 console.print(tree)
