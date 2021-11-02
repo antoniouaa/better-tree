@@ -7,6 +7,7 @@ themes = Theme(
         "file": "white",
         "dir": "dim cyan",
         "pipe": "white",
+        "hidden": "blue",
     }
 )
 
