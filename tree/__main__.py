@@ -1,25 +1,38 @@
 import pathlib
 
+from rich.tree import Tree
+
 from tree import assemble_parser
 from tree.console import console
-from tree.rich_tree import tree as r_tree
+
+EMOJIS = {
+    "yaml": (":memo:", "red"),
+    "md": (":part_alternation_mark:", "red"),
+    "py": (":snake:", "green"),
+    "lock": (":lock:", "#e6e4e1"),
+    "toml": (":wrench:", "blue"),
+}
 
 
 def traverse(path: pathlib.Path, subtree) -> None:
-    for p in path.glob("*"):
+    for p in sorted(path.glob("*")):
         if any(p.name.startswith(char) for char in (".", "__")) and p.is_dir():
             continue
 
         if p.is_dir():
-            node = subtree.add(f":file_folder: {p.name}")
+            node = subtree.add(f":file_folder: {p.name}", style="#ffdf87")
             traverse(p, node)
         else:
-            subtree.add(p.name)
+            for suffix, (emoji, style) in EMOJIS.items():
+                if p.name.endswith(suffix):
+                    subtree.add(f"{emoji:<3s} {p.name}", style=style)
 
 
 args = assemble_parser()
-depth = args.depth
+# depth = args.depth
 
 root = pathlib.Path(args.path[0])
-traverse(root, r_tree)
-console.print(r_tree)
+
+tree = Tree(str(root))
+traverse(root, tree)
+console.print(tree)
