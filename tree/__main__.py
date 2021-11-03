@@ -5,38 +5,64 @@ from rich.tree import Tree
 from tree import assemble_parser
 from tree.console import console
 
-EMOJIS = {
-    "yaml": (":memo:", "red"),
-    "md": (":part_alternation_mark:", "red"),
-    "py": (":snake:", "green"),
-    "lock": (":lock:", "#e6e4e1"),
-    "toml": (":wrench:", "blue"),
+EMOJIS: dict[str, tuple[str, str]] = {
+    ".yaml": (":memo:", "red"),
+    ".md": (":part_alternation_mark:", "red"),
+    ".py": (":snake:", "green"),
+    ".lock": (":lock:", "#e6e4e1"),
+    ".toml": (":wrench:", "blue"),
+    ".txt": (":memo:", "#e6e6e6"),
 }
 
 
-def traverse(path: pathlib.Path, subtree: Tree, depth: int = 1) -> None:
+def traverse(
+    path: pathlib.Path,
+    subtree: Tree,
+    depth: int = 1,
+    include: str = "*",
+) -> None:
     for p in sorted(path.glob("*")):
         if any(p.name.startswith(char) for char in (".", "__")) and p.is_dir():
             continue
 
         level = len(p.parts)
-        if level > depth:
+        if depth != -1 and level > depth:
             return None
 
         if p.is_dir():
-            node = subtree.add(f":file_folder: {p.name}", style="#ffdf87")
-            traverse(p, node, depth)
-        else:
+            if not any(sub_p.match(include) for sub_p in p.iterdir()):
+                continue
+
+            node = subtree.add(
+                f":file_folder: {p.name}", style="#ffdf87", highlight=True
+            )
+            traverse(
+                path=p,
+                subtree=node,
+                depth=depth,
+                include=include,
+            )
+        elif p.match(include):
             for suffix, (emoji, style) in EMOJIS.items():
-                if p.name.endswith(suffix):
+                if p.suffix == suffix:
                     subtree.add(f"{emoji:<3s} {p.name}", style=style)
 
 
-args = assemble_parser()
-depth = args.depth[0]
+def main() -> None:
+    args = assemble_parser()
 
-root = pathlib.Path(args.path[0])
+    root = pathlib.Path(args.path[0])
+    depth = args.depth if isinstance(args.depth, int) else args.depth[0]
+    include = args.include[0]
 
-tree = Tree(str(root))
-traverse(path=root, subtree=tree, depth=depth)
-console.print(tree)
+    tree = Tree(f":seedling: {root}", highlight=True)
+    traverse(
+        path=root,
+        subtree=tree,
+        depth=depth,
+        include=include,
+    )
+    console.print(tree)
+
+
+main()
