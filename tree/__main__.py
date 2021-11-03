@@ -20,6 +20,7 @@ def traverse(
     subtree: Tree,
     depth: int = 1,
     include: str = "*",
+    file: bool = False,
 ) -> None:
     for p in sorted(path.glob("*")):
         if any(p.name.startswith(char) for char in (".", "__")) and p.is_dir():
@@ -33,9 +34,11 @@ def traverse(
             if not any(sub_p.match(include) for sub_p in p.iterdir()):
                 continue
 
-            node = subtree.add(
-                f":file_folder: {p.name}", style="#ffdf87", highlight=True
-            )
+            node = subtree
+            if not file:
+                node = subtree.add(
+                    f":file_folder: {p.name}", style="#ffdf87", highlight=True
+                )
             traverse(
                 path=p,
                 subtree=node,
@@ -51,9 +54,10 @@ def traverse(
 def main() -> None:
     args = assemble_parser()
 
-    root = pathlib.Path(args.path[0])
-    depth = args.depth if isinstance(args.depth, int) else args.depth[0]
-    include = args.include[0]
+    root = pathlib.Path(args.Path)
+    depth = args.depth
+    include = args.include
+    file = args.file
 
     tree = Tree(f":seedling: {root}", highlight=True)
     traverse(
@@ -61,6 +65,7 @@ def main() -> None:
         subtree=tree,
         depth=depth,
         include=include,
+        file=file,
     )
     console.print(tree)
 
