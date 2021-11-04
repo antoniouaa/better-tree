@@ -2,8 +2,8 @@ import pathlib
 
 from rich.tree import Tree
 
-from tree import assemble_parser
-from tree.console import console
+from better_tree import assemble_parser
+from better_tree.console import console
 
 EMOJIS: dict[str, tuple[str, str]] = {
     ".yaml": (":memo:", "red"),
@@ -68,6 +68,3 @@ def main() -> None:
         file=file,
     )
     console.print(tree)
-
-
-main()

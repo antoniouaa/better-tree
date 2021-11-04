@@ -36,3 +36,6 @@ def assemble_parser() -> argparse.Namespace:
         help="Only show files",
     )
     return parser.parse_args()
+
+
+from better_tree.main import main as main
