@@ -1,15 +1,13 @@
 [tool.poetry]
 name = "better_tree"
-version = "0.1.0"
+version = "0.1.1-alpha.2"
 description = "A better tree utility in Python"
 authors = ["antoniouaa <antoniouaa@hotmail.com>"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/antoniouaa/better-tree"
 repository = "https://github.com/antoniouaa/better-tree"
-include = [
-    "LICENSE",
-]
+include = ["LICENSE"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -21,11 +19,11 @@ black = "^21.9b0"
 pre-commit = "^2.15.0"
 
 [tool.poetry.scripts]
-better-tree = "better_tree:main"
+better-tree = "better_tree.main:run"
 
 [tools.poetry.urls]
 issues = "https://github.com/antoniouaa/better-tree/issues"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.0.0", "setuptools", "wheel"]
 build-backend = "poetry.core.masonry.api"

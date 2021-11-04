@@ -2,7 +2,7 @@ import pathlib
 
 from rich.tree import Tree
 
-from better_tree import assemble_parser
+from better_tree.parser import assemble_parser
 from better_tree.console import console
 
 EMOJIS: dict[str, tuple[str, str]] = {
@@ -51,7 +51,7 @@ def traverse(
                     subtree.add(f"{emoji:<3s} {p.name}", style=style)
 
 
-def main() -> None:
+def run() -> None:
     args = assemble_parser()
 
     root = pathlib.Path(args.Path)
