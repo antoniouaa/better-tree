@@ -33,3 +33,14 @@ _Note: Specifying an `Include` flag of `"__*"` for example will still not show a
 
 `Depth` defaults to indefinite, recursively going down level by level.
 `File` defaults to False, if the flag is used `better-tree` will only display files, without showing depth.
+
+## Install from source
+
+```
+git clone https://github.com/antoniouaa/better-tree.git
+cd better-tree
+poetry build
+pip install <wheel file here>
+
+better-tree --help # displays help
+```
