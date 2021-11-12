@@ -1,12 +1,19 @@
+import sys
 import argparse
 
 PROG = "tree"
 USAGE = "%(prog)s <Path> [options]"
-DESCRIPTION = "Tree utility in Python"
+DESCRIPTION = "Featureful tree utility in Python"
 
 
-def assemble_parser() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
+class CLIParser(argparse.ArgumentParser):
+    def error(self, *args, **kwargs):
+        self.print_help()
+        sys.exit(1)
+
+
+def assemble_parser() -> CLIParser:
+    parser = CLIParser(
         prog=PROG,
         usage=USAGE,
         description=DESCRIPTION,
@@ -30,9 +37,17 @@ def assemble_parser() -> argparse.Namespace:
         help="Glob pattern to include in the search",
     )
     parser.add_argument(
+        "--Exclude",
+        dest="exclude",
+        default="",
+        type=str,
+        help="Glob pattern to exclude from the search",
+    )
+    parser.add_argument(
         "--File",
         dest="file",
         action="store_true",
         help="Only show files",
     )
-    return parser.parse_args()
+    parser.set_defaults(fuc=parser.print_help)
+    return parser

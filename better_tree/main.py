@@ -12,6 +12,11 @@ EMOJIS: dict[str, tuple[str, str]] = {
     ".lock": (":lock:", "#e6e4e1"),
     ".toml": (":wrench:", "blue"),
     ".txt": (":memo:", "#e6e6e6"),
+    ".xlsm": (":green_book:", "#1f6e43"),
+    ".xlsx": (":green_book:", "#1f6e43"),
+    ".xls": (":green_book:", "#1f6e43"),
+    ".html": (":computer:", "#5dadec"),
+    ".pdf": (":bookmark_tabs:", "#e81224"),
 }
 
 
@@ -20,9 +25,13 @@ def traverse(
     subtree: Tree,
     depth: int = 1,
     include: str = "*",
+    exclude: str = "",
     file: bool = False,
 ) -> None:
     for p in sorted(path.glob("*")):
+        if exclude and p.match(exclude):
+            continue
+
         if any(p.name.startswith(char) for char in (".", "__")) and p.is_dir():
             continue
 
@@ -44,6 +53,8 @@ def traverse(
                 subtree=node,
                 depth=depth,
                 include=include,
+                exclude=exclude,
+                file=file,
             )
         elif p.match(include):
             for suffix, (emoji, style) in EMOJIS.items():
@@ -52,11 +63,13 @@ def traverse(
 
 
 def run() -> None:
-    args = assemble_parser()
+    cliparser = assemble_parser()
+    args = cliparser.parse_args()
 
     root = pathlib.Path(args.Path)
     depth = args.depth
     include = args.include
+    exclude = args.exclude
     file = args.file
 
     tree = Tree(f":seedling: {root}", highlight=True)
@@ -65,6 +78,7 @@ def run() -> None:
         subtree=tree,
         depth=depth,
         include=include,
+        exclude=exclude,
         file=file,
     )
     console.print(tree)
