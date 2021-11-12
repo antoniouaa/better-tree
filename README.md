@@ -41,7 +41,7 @@ _Note: Specifying an `Include` flag of `"__*"` for example will still not show a
 git clone https://github.com/antoniouaa/better-tree.git
 cd better-tree
 poetry build
-pip install <wheel file here>
+pip install dist/<wheel file here>
 
 better-tree --help # displays help
 ```
