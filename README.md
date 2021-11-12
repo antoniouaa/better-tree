@@ -11,7 +11,7 @@ Cause I'm bored out of my mind.
 ```
 usage: tree <Path> [options]
 
-Tree utility in Python
+Featureful tree utility in Python
 
 positional arguments:
   Path               The path to search in
@@ -20,6 +20,7 @@ optional arguments:
   -h, --help         show this help message and exit
   --Depth DEPTH      Number of levels of depth
   --Include INCLUDE  Glob pattern to include in the search
+  --Exclude EXCLUDE  Glob pattern to exclude from the search
   --File             Only show files
 ```
 
